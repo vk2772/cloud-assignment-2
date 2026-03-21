@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  # MongoDB container
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  # Flask app container
+  web:
+    build: .
+    ports:
+      - "5001:5000"
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+    depends_on:
+      - mongo
+
+# This volume saves your MongoDB data even if containers stop
+volumes:
+  mongodata:
